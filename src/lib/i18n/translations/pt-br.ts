@@ -72,6 +72,10 @@ export const ptBR = {
   "notFound.description": "Essa página não existe. Talvez alguém já tenha te tirado daqui antes de você chegar.",
   "notFound.joke": "A galera foi embora e esqueceu de te avisar 🫠",
 
+  // Footer
+  "footer.builtWith": "feito com 🧡 por",
+  "footer.checkOn": "Confira no",
+
   // Funny messages
   "funny.0": "Aguenta mais um pouquinho... ou não",
   "funny.1": "Seu voto foi computado! Agora é torcer pra galera pensar igual",

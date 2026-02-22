@@ -74,6 +74,10 @@ export const en: Record<TranslationKey, string> = {
   "notFound.description": "This page doesn't exist. Maybe someone already got you outta here before you arrived.",
   "notFound.joke": "Everyone left and forgot to tell you 🫠",
 
+  // Footer
+  "footer.builtWith": "built with 🧡 by",
+  "footer.checkOn": "Check it on",
+
   // Funny messages
   "funny.0": "Hang tight just a little longer... or not",
   "funny.1": "Your vote is in! Now let's hope everyone's on the same page",
