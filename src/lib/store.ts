@@ -16,22 +16,32 @@ interface Group {
   sseClients: Set<ReadableStreamDefaultController>;
 }
 
-const groups = new Map<string, Group>();
+// Pin the store to globalThis so it survives HMR in dev mode
+const globalStore = globalThis as unknown as {
+  __metiradaqui_groups?: Map<string, Group>;
+  __metiradaqui_cleanup?: ReturnType<typeof setInterval>;
+};
 
-// Auto-expire groups older than 12h
-setInterval(() => {
-  const now = Date.now();
-  const TWELVE_HOURS = 12 * 60 * 60 * 1000;
-  for (const [id, group] of groups) {
-    if (now - group.createdAt > TWELVE_HOURS || (group.members.size === 0 && now - group.createdAt > 60000)) {
-      // Close SSE connections before removing
-      for (const controller of group.sseClients) {
-        try { controller.close(); } catch {}
+if (!globalStore.__metiradaqui_groups) {
+  globalStore.__metiradaqui_groups = new Map<string, Group>();
+}
+
+if (!globalStore.__metiradaqui_cleanup) {
+  globalStore.__metiradaqui_cleanup = setInterval(() => {
+    const now = Date.now();
+    const TWELVE_HOURS = 12 * 60 * 60 * 1000;
+    for (const [id, group] of groups) {
+      if (now - group.createdAt > TWELVE_HOURS || (group.members.size === 0 && now - group.createdAt > 60000)) {
+        for (const controller of group.sseClients) {
+          try { controller.close(); } catch {}
+        }
+        groups.delete(id);
       }
-      groups.delete(id);
     }
-  }
-}, 5 * 60 * 1000);
+  }, 5 * 60 * 1000);
+}
+
+const groups = globalStore.__metiradaqui_groups;
 
 export function createGroup(hostName: string): { groupId: string; memberId: string } {
   const groupId = nanoid(6);
@@ -100,7 +110,6 @@ export function closeGroup(groupId: string, memberId: string): boolean {
   group.closed = true;
   broadcast(groupId, "group-closed", {});
 
-  // Close all SSE connections
   for (const controller of group.sseClients) {
     try { controller.close(); } catch {}
   }

@@ -32,7 +32,7 @@ export function GroupLobby({ groupId, onJoined }: GroupLobbyProps) {
       localStorage.setItem(`metiradaqui-${groupId}`, memberId);
       onJoined(memberId);
     } catch {
-      alert("Erro ao entrar no grupo. O grupo pode nao existir ou ja ter sido encerrado.");
+      alert("Erro ao entrar no grupo. O grupo pode não existir ou já ter sido encerrado.");
     } finally {
       setLoading(false);
     }
@@ -42,17 +42,17 @@ export function GroupLobby({ groupId, onJoined }: GroupLobbyProps) {
     <div className="flex-1 flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6 text-center">
         <div className="space-y-2">
-          <h1 className="text-4xl font-bold">🍺 Me Tira Daqui!</h1>
+          <h1 className="text-3xl font-bold">🍻 Me Tira Daqui!</h1>
           <p className="text-muted-foreground">
-            Voce foi convidado pra um grupo.
+            Você foi convidado pra um grupo.
             <br />
-            Coloca seu nome pra entrar no role!
+            Coloca seu nome pra entrar no rolê!
           </p>
         </div>
 
-        <Card className="border-primary/20">
+        <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Entrar no Grupo</CardTitle>
+            <CardTitle className="text-lg">Entrar no grupo</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleJoin} className="space-y-4">
@@ -70,7 +70,7 @@ export function GroupLobby({ groupId, onJoined }: GroupLobbyProps) {
                 className="w-full text-lg h-12 font-semibold"
                 disabled={!name.trim() || loading}
               >
-                {loading ? "Entrando..." : "Entrar no Role 🍻"}
+                {loading ? "Entrando..." : "Entrar no rolê 🍻"}
               </Button>
             </form>
           </CardContent>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -26,39 +27,39 @@ export function CreateGroupForm() {
       if (!res.ok) throw new Error("Erro ao criar grupo");
 
       const { groupId, memberId } = await res.json();
-
-      // Store memberId in localStorage
       localStorage.setItem(`metiradaqui-${groupId}`, memberId);
-
       router.push(`/grupo/${groupId}`);
+      // Don't reset loading — we're navigating away
     } catch {
       alert("Erro ao criar grupo. Tente novamente.");
-    } finally {
       setLoading(false);
     }
   }
 
   return (
-    <Card className="border-primary/20">
+    <Card>
       <CardContent className="pt-6">
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Input
-              placeholder="Seu nome (ex: Zezinho)"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              maxLength={30}
-              className="text-center text-lg h-12"
-              autoFocus
-            />
-          </div>
+          <Input
+            placeholder="Seu nome (ex: Zezinho)"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            maxLength={30}
+            className="text-center text-lg h-12"
+            autoFocus
+          />
           <Button
             type="submit"
             size="lg"
-            className="w-full text-lg h-12 font-semibold"
+            className="w-full text-lg h-12 font-semibold gap-2"
             disabled={!name.trim() || loading}
           >
-            {loading ? "Criando..." : "Criar Grupo 🍻"}
+            {loading ? "Criando..." : (
+              <>
+                Criar grupo
+                <ArrowRight className="h-5 w-5" />
+              </>
+            )}
           </Button>
         </form>
       </CardContent>

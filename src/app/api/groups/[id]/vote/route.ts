@@ -11,12 +11,12 @@ export async function POST(
     const { memberId } = body;
 
     if (!memberId) {
-      return NextResponse.json({ error: "memberId e obrigatorio" }, { status: 400 });
+      return NextResponse.json({ error: "memberId é obrigatório" }, { status: 400 });
     }
 
     const result = castVote(id, memberId);
     if (!result.success) {
-      return NextResponse.json({ error: "Voto invalido" }, { status: 400 });
+      return NextResponse.json({ error: "Voto inválido" }, { status: 400 });
     }
 
     return NextResponse.json({ success: true });

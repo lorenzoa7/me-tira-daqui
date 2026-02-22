@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { ArrowLeft } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface GroupFinishedProps {
   isClosed: boolean;
@@ -13,14 +15,12 @@ const CONFETTI_COLORS = [
 ];
 
 export function GroupFinished({ isClosed }: GroupFinishedProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
   const confettiSpawned = useRef(false);
 
   useEffect(() => {
     if (isClosed || confettiSpawned.current) return;
     confettiSpawned.current = true;
 
-    // Spawn confetti pieces
     for (let i = 0; i < 50; i++) {
       const piece = document.createElement("div");
       piece.className = "confetti-piece";
@@ -40,36 +40,39 @@ export function GroupFinished({ isClosed }: GroupFinishedProps) {
 
   if (isClosed) {
     return (
-      <Card className="border-muted">
-        <CardContent className="pt-6 text-center space-y-4">
-          <div className="text-5xl">👋</div>
-          <h2 className="text-2xl font-bold">Grupo Encerrado</h2>
-          <p className="text-muted-foreground">
-            O host encerrou esse grupo. Valeu pela presenca!
-          </p>
-        </CardContent>
-      </Card>
+      <div className="space-y-4">
+        <Card>
+          <CardContent className="pt-6 text-center space-y-4">
+            <h2 className="text-2xl font-bold">Grupo encerrado 👋</h2>
+            <p className="text-muted-foreground">
+              O host encerrou esse grupo. Valeu pela presença!
+            </p>
+          </CardContent>
+        </Card>
+        <Button variant="secondary" className="w-full gap-2" asChild>
+          <a href="/">
+            <ArrowLeft className="h-4 w-4" />
+            Voltar ao início
+          </a>
+        </Button>
+      </div>
     );
   }
 
   return (
-    <div ref={containerRef}>
-      <Card className="border-primary bg-primary/10">
-        <CardContent className="pt-8 pb-8 text-center space-y-4">
-          <div className="text-6xl animate-float">
-            🎉🍺🎉
-          </div>
-          <h2 className="text-3xl font-bold text-primary">
-            HORA DE VAZAR!
-          </h2>
-          <p className="text-xl text-foreground/80">
-            A maioria votou - bora embora, galera!
-          </p>
-          <p className="text-muted-foreground text-sm">
-            Pega as coisas e bora 🏃‍♂️💨
-          </p>
-        </CardContent>
-      </Card>
-    </div>
+    <Card className="border-primary bg-primary/10">
+      <CardContent className="pt-8 pb-8 text-center space-y-3">
+        <p className="text-4xl">🎉🍻🎉</p>
+        <h2 className="text-3xl font-bold text-primary">
+          HORA DE VAZAR!
+        </h2>
+        <p className="text-lg text-foreground/80">
+          A maioria votou — bora embora, galera!
+        </p>
+        <p className="text-muted-foreground text-sm">
+          Pega as coisas e partiu 🏃💨
+        </p>
+      </CardContent>
+    </Card>
   );
 }

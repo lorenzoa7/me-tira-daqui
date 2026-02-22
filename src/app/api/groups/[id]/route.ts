@@ -10,12 +10,12 @@ export async function GET(
   const memberId = url.searchParams.get("memberId");
 
   if (!memberId) {
-    return NextResponse.json({ error: "memberId e obrigatorio" }, { status: 400 });
+    return NextResponse.json({ error: "memberId é obrigatório" }, { status: 400 });
   }
 
   const info = getGroupInfo(id, memberId);
   if (!info) {
-    return NextResponse.json({ error: "Grupo nao encontrado" }, { status: 404 });
+    return NextResponse.json({ error: "Grupo não encontrado" }, { status: 404 });
   }
 
   return NextResponse.json(info);

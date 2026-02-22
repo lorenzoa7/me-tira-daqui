@@ -1,17 +1,37 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { DM_Sans } from "next/font/google";
+import { ThemeToggle } from "@/components/theme-toggle";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Me Tira Daqui! 🍺",
+  title: "Me Tira Daqui",
   description:
-    "Vote anonimamente pra ir embora do role sem ser o chatao. Quando a maioria votar, todo mundo fica sabendo!",
+    "Vote anonimamente pra ir embora do rolê sem ser o chatão. Quando a maioria votar, todo mundo fica sabendo!",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
+
+// Inline script that runs before paint to prevent dark/light flash
+const themeScript = `
+(function(){
+  try {
+    var t = localStorage.getItem('metiradaqui-theme');
+    if (t === 'light') {
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
+  } catch(e) {
+    document.documentElement.classList.add('dark');
+  }
+})();
+`;
 
 export default function RootLayout({
   children,
@@ -19,10 +39,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
-      <body className={`${geistSans.variable} font-sans antialiased`}>
+    <html lang="pt-BR" className="dark" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
+      <body className={`${dmSans.variable} font-sans antialiased`}>
         <div className="min-h-screen flex flex-col">
-          {children}
+          <header className="flex justify-end p-3">
+            <ThemeToggle />
+          </header>
+          <div className="flex-1 flex flex-col">
+            {children}
+          </div>
         </div>
       </body>
     </html>

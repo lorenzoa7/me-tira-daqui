@@ -2,14 +2,14 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import { GroupLobby } from "@/components/group-lobby";
 import { VoteButton } from "@/components/vote-button";
 import { VoteSubmitted } from "@/components/vote-submitted";
 import { GroupFinished } from "@/components/group-finished";
 import { ShareLink } from "@/components/share-link";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface GroupInfo {
   memberCount: number;
@@ -59,7 +59,6 @@ export default function GroupPage() {
     [groupId]
   );
 
-  // Check localStorage for existing memberId
   useEffect(() => {
     const stored = localStorage.getItem(`metiradaqui-${groupId}`);
     if (stored) {
@@ -70,7 +69,6 @@ export default function GroupPage() {
     }
   }, [groupId, fetchInfo]);
 
-  // Request notification permission
   useEffect(() => {
     if (memberId && !notificationPermissionAsked.current) {
       notificationPermissionAsked.current = true;
@@ -80,7 +78,6 @@ export default function GroupPage() {
     }
   }, [memberId]);
 
-  // SSE connection
   useEffect(() => {
     if (!memberId) return;
 
@@ -97,17 +94,15 @@ export default function GroupPage() {
     });
 
     es.addEventListener("vote-cast", () => {
-      // We don't show vote count to preserve anonymity, but we refetch to update state
       fetchInfo(memberId);
     });
 
     es.addEventListener("time-to-leave", () => {
       setIsFinished(true);
-      // Fire browser notification
       if ("Notification" in window && Notification.permission === "granted") {
-        new Notification("🍺 Me Tira Daqui!", {
+        new Notification("🍻 Me Tira Daqui!", {
           body: "Hora de vazar, galera! A maioria votou pra ir embora!",
-          icon: "/favicon.ico",
+          icon: "/favicon.svg",
         });
       }
     });
@@ -148,42 +143,37 @@ export default function GroupPage() {
     }
   }
 
-  // Loading state
   if (loading) {
     return (
       <main className="flex-1 flex items-center justify-center p-4">
-        <div className="text-center space-y-3">
-          <div className="text-4xl animate-float">🍺</div>
-          <p className="text-muted-foreground">Carregando...</p>
-        </div>
+        <p className="text-muted-foreground">Carregando...</p>
       </main>
     );
   }
 
-  // Not found
   if (notFound) {
     return (
       <main className="flex-1 flex items-center justify-center p-4">
-        <div className="text-center space-y-3">
-          <div className="text-4xl">😕</div>
-          <h2 className="text-xl font-semibold">Grupo nao encontrado</h2>
+        <div className="text-center space-y-4">
+          <h2 className="text-xl font-semibold">Grupo não encontrado 😕</h2>
           <p className="text-muted-foreground">
-            Esse grupo nao existe ou ja expirou.
+            Esse grupo não existe ou já expirou.
           </p>
-          <a href="/" className="text-primary underline">
-            Voltar pro inicio
-          </a>
+          <Button variant="secondary" size="sm" className="gap-2" asChild>
+            <a href="/">
+              <ArrowLeft className="h-4 w-4" />
+              Voltar ao início
+            </a>
+          </Button>
         </div>
       </main>
     );
   }
 
-  // Not joined yet - show lobby
   if (!memberId) {
     return <GroupLobby groupId={groupId} onJoined={handleJoined} />;
   }
 
-  // Closed group
   if (isClosed) {
     return (
       <main className="flex-1 flex flex-col items-center justify-center p-4">
@@ -194,7 +184,6 @@ export default function GroupPage() {
     );
   }
 
-  // Majority reached - time to leave!
   if (isFinished) {
     return (
       <main className="flex-1 flex flex-col items-center justify-center p-4">
@@ -203,11 +192,12 @@ export default function GroupPage() {
           {info?.isHost && (
             <Button
               variant="outline"
+              size="sm"
               className="w-full"
               onClick={handleCloseGroup}
               disabled={closingGroup}
             >
-              {closingGroup ? "Encerrando..." : "Encerrar Grupo 👋"}
+              {closingGroup ? "Encerrando..." : "Encerrar grupo"}
             </Button>
           )}
         </div>
@@ -215,36 +205,36 @@ export default function GroupPage() {
     );
   }
 
-  // Main group view (joined, can vote or already voted)
   return (
     <main className="flex-1 flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md space-y-4">
         <div className="text-center space-y-1">
-          <h1 className="text-3xl font-bold">🍺 Me Tira Daqui!</h1>
-          <Badge variant="secondary" className="text-sm">
-            {info?.memberCount ?? "..."} no role
-          </Badge>
+          <h1 className="text-2xl font-bold">🍻 Me Tira Daqui!</h1>
+          <p className="text-sm text-muted-foreground">
+            {info?.memberCount ?? "..."} no rolê
+          </p>
         </div>
 
         <ShareLink groupId={groupId} />
 
-        {/* Members list */}
-        <Card className="border-border/50">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted-foreground font-normal">
-              Quem ta no role:
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-wrap gap-2">
-            {info?.members.map((name, i) => (
-              <Badge key={i} variant="outline" className="text-sm">
-                {name}
-              </Badge>
-            ))}
+        <Card>
+          <CardContent className="pt-4 pb-4">
+            <p className="text-sm text-muted-foreground font-medium mb-2">
+              Quem tá no rolê
+            </p>
+            <div className="space-y-1.5">
+              {info?.members.map((name, i) => (
+                <div
+                  key={i}
+                  className="px-3 py-2 bg-muted/50 rounded-md text-sm"
+                >
+                  {name}
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
 
-        {/* Vote or waiting state */}
         {hasVoted ? (
           <VoteSubmitted />
         ) : (
@@ -255,17 +245,16 @@ export default function GroupPage() {
           />
         )}
 
-        {/* Host controls */}
         {info?.isHost && (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="w-full text-muted-foreground"
-            onClick={handleCloseGroup}
-            disabled={closingGroup}
-          >
-            {closingGroup ? "Encerrando..." : "Encerrar grupo"}
-          </Button>
+          <div className="text-center pt-2">
+            <button
+              className="text-xs text-muted-foreground/50 hover:text-muted-foreground transition-colors"
+              onClick={handleCloseGroup}
+              disabled={closingGroup}
+            >
+              {closingGroup ? "Encerrando..." : "Encerrar grupo"}
+            </button>
+          </div>
         )}
       </div>
     </main>

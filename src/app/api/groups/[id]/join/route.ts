@@ -11,7 +11,7 @@ export async function POST(
     const { name } = body;
 
     if (!name || typeof name !== "string" || name.trim().length === 0) {
-      return NextResponse.json({ error: "Nome e obrigatorio" }, { status: 400 });
+      return NextResponse.json({ error: "Nome é obrigatório" }, { status: 400 });
     }
 
     if (name.trim().length > 30) {
@@ -20,7 +20,7 @@ export async function POST(
 
     const result = joinGroup(id, name.trim());
     if (!result) {
-      return NextResponse.json({ error: "Grupo nao encontrado ou ja encerrado" }, { status: 404 });
+      return NextResponse.json({ error: "Grupo não encontrado ou já encerrado" }, { status: 404 });
     }
 
     return NextResponse.json(result);

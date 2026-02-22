@@ -11,7 +11,7 @@ export async function POST(
     const { memberId } = body;
 
     if (!memberId) {
-      return NextResponse.json({ error: "memberId e obrigatorio" }, { status: 400 });
+      return NextResponse.json({ error: "memberId é obrigatório" }, { status: 400 });
     }
 
     const success = closeGroup(id, memberId);

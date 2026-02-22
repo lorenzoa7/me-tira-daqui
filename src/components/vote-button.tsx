@@ -33,17 +33,17 @@ export function VoteButton({ groupId, memberId, onVoted }: VoteButtonProps) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <Button
         onClick={handleVote}
         disabled={loading}
         size="lg"
-        className="w-full h-20 text-2xl font-bold animate-pulse-glow hover:scale-105 transition-transform"
+        className="w-full h-16 text-xl font-bold animate-pulse-glow hover:scale-[1.02] transition-transform"
       >
         {loading ? "Votando..." : "🏃 ME TIRA DAQUI!"}
       </Button>
-      <p className="text-sm text-muted-foreground text-center">
-        Voto anonimo - ninguem vai saber que foi voce
+      <p className="text-xs text-muted-foreground text-center">
+        Voto anônimo — ninguém vai saber que foi você 🤫
       </p>
     </div>
   );

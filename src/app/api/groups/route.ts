@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     const { hostName } = body;
 
     if (!hostName || typeof hostName !== "string" || hostName.trim().length === 0) {
-      return NextResponse.json({ error: "Nome e obrigatorio" }, { status: 400 });
+      return NextResponse.json({ error: "Nome é obrigatório" }, { status: 400 });
     }
 
     if (hostName.trim().length > 30) {
