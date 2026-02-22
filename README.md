@@ -1,59 +1,59 @@
 # Me Tira Daqui! 🍻
 
-Vote anonimamente pra ir embora do role. Quando a maioria votar, todo mundo fica sabendo!
+Anonymously vote to leave a hangout. When the majority votes, everyone gets notified!
 
-**Me Tira Daqui!** resolve aquele problema classico: ninguem quer ser a pessoa chata que diz "galera, acho que ta na hora de irmos". Com esse app, cada um vota em segredo, e quando mais da metade do grupo quiser ir embora, todo mundo e notificado ao mesmo tempo. Sem julgamento, sem exposicao.
+**Me Tira Daqui!** (Portuguese for "Get me out of here!") solves a classic problem: nobody wants to be the buzzkill who says "hey guys, I think it's time to go". With this app, everyone votes secretly, and when more than half the group wants to leave, everyone is notified at once. No judgment, no exposure.
 
-## Como funciona
+## How it works
 
-1. Voce acessa o app, digita seu nome e cria um **Grupo**
-2. Um link curto e compartilhavel e gerado — manda pros amigos
-3. Cada amigo entra pelo link e digita seu nome
-4. Na tela de cada um, aparece o botao **"ME TIRA DAQUI!"** — ao clicar, voce vota que quer ir embora
-5. O voto e anonimo — ninguem sabe quem votou nem quantos votos ja foram computados
-6. Quando **50% + 1** do grupo votar, todo mundo recebe a notificacao: **"Hora de vazar!"** 🎉
-7. O grupo e encerrado quando o host fechar a sessao ou apos 12h de inatividade
+1. You open the app, type your name and create a **Group**
+2. A short shareable link is generated — send it to your friends
+3. Each friend joins through the link and types their name
+4. Everyone sees a big **"ME TIRA DAQUI!"** button — tap it to vote to leave
+5. Votes are anonymous — no one knows who voted or how many votes have been cast
+6. When **50% + 1** of the group votes, everyone gets notified: **"Time to go!"** 🎉
+7. The group is closed when the host ends the session or after 12h of inactivity
 
 ## Tech stack
 
-- **Next.js 16** — App Router com API Routes
+- **Next.js 16** — App Router with API Routes
 - **React 19**
-- **Tailwind CSS 4** + **shadcn/ui** — UI moderna com tema laranja (remetendo a cerveja 🍺)
-- **Motion (Framer Motion)** — Animacoes fluidas nos componentes
-- **SSE (Server-Sent Events)** — Atualizacoes em tempo real sem WebSocket
-- **Web Notifications API** — Notificacao push no navegador quando chega a hora de ir embora
-- **PWA** — Instalavel como app no celular (manifest + icones)
-- **nanoid** — IDs curtos para os grupos
+- **Tailwind CSS 4** + **shadcn/ui** — Modern UI with an orange theme (beer vibes 🍺)
+- **Motion (Framer Motion)** — Smooth component animations
+- **SSE (Server-Sent Events)** — Real-time updates without WebSockets
+- **Web Notifications API** — Browser push notification when it's time to leave
+- **PWA** — Installable as a mobile app (manifest + icons)
+- **nanoid** — Short IDs for groups
 
-## Rodando localmente
+## Running locally
 
 ```bash
-# Instalar dependencias
+# Install dependencies
 npm install
 
-# Rodar em modo dev
+# Run in dev mode
 npm run dev
 ```
 
-Acesse [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000).
 
-## Build de producao
+## Production build
 
 ```bash
 npm run build
 npm start
 ```
 
-## Detalhes de implementacao
+## Implementation details
 
-**Armazenamento**: os dados dos grupos ficam em memoria no servidor (Map/Set). Nao ha banco de dados — os grupos sao efemeros por natureza e expiram automaticamente apos 12 horas.
+**Storage**: Group data is kept in-memory on the server (Map/Set). There is no database — groups are ephemeral by nature and automatically expire after 12 hours.
 
-**Tempo real**: a comunicacao entre servidor e clientes usa Server-Sent Events (SSE). Quando alguem entra no grupo, vota, ou o threshold e atingido, todos os clientes conectados recebem o evento instantaneamente.
+**Real-time**: Communication between server and clients uses Server-Sent Events (SSE). When someone joins, votes, or the threshold is reached, all connected clients receive the event instantly.
 
-**Anonimato**: o app mostra quem esta no grupo, mas nunca revela quem votou ou quantos votos foram computados. A unica informacao publica e quando a maioria ja votou.
+**Anonymity**: The app shows who's in the group, but never reveals who voted or how many votes have been cast. The only public information is when the majority has voted.
 
-**Notificacoes**: ao entrar num grupo, o app solicita permissao de notificacao. Quando o threshold e atingido, uma notificacao push e disparada mesmo se o usuario estiver em outra aba.
+**Notifications**: When joining a group, the app requests notification permission. When the threshold is reached, a push notification is fired even if the user is on another tab.
 
-## Licenca
+## License
 
 [MIT](LICENSE)
