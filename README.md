@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Me Tira Daqui! 🍻
 
-## Getting Started
+Vote anonimamente pra ir embora do role. Quando a maioria votar, todo mundo fica sabendo!
 
-First, run the development server:
+**Me Tira Daqui!** resolve aquele problema classico: ninguem quer ser a pessoa chata que diz "galera, acho que ta na hora de irmos". Com esse app, cada um vota em segredo, e quando mais da metade do grupo quiser ir embora, todo mundo e notificado ao mesmo tempo. Sem julgamento, sem exposicao.
+
+## Como funciona
+
+1. Voce acessa o app, digita seu nome e cria um **Grupo**
+2. Um link curto e compartilhavel e gerado — manda pros amigos
+3. Cada amigo entra pelo link e digita seu nome
+4. Na tela de cada um, aparece o botao **"ME TIRA DAQUI!"** — ao clicar, voce vota que quer ir embora
+5. O voto e anonimo — ninguem sabe quem votou nem quantos votos ja foram computados
+6. Quando **50% + 1** do grupo votar, todo mundo recebe a notificacao: **"Hora de vazar!"** 🎉
+7. O grupo e encerrado quando o host fechar a sessao ou apos 12h de inatividade
+
+## Tech stack
+
+- **Next.js 16** — App Router com API Routes
+- **React 19**
+- **Tailwind CSS 4** + **shadcn/ui** — UI moderna com tema laranja (remetendo a cerveja 🍺)
+- **Motion (Framer Motion)** — Animacoes fluidas nos componentes
+- **SSE (Server-Sent Events)** — Atualizacoes em tempo real sem WebSocket
+- **Web Notifications API** — Notificacao push no navegador quando chega a hora de ir embora
+- **PWA** — Instalavel como app no celular (manifest + icones)
+- **nanoid** — IDs curtos para os grupos
+
+## Rodando localmente
 
 ```bash
+# Instalar dependencias
+npm install
+
+# Rodar em modo dev
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Acesse [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build de producao
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## Detalhes de implementacao
 
-To learn more about Next.js, take a look at the following resources:
+**Armazenamento**: os dados dos grupos ficam em memoria no servidor (Map/Set). Nao ha banco de dados — os grupos sao efemeros por natureza e expiram automaticamente apos 12 horas.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Tempo real**: a comunicacao entre servidor e clientes usa Server-Sent Events (SSE). Quando alguem entra no grupo, vota, ou o threshold e atingido, todos os clientes conectados recebem o evento instantaneamente.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Anonimato**: o app mostra quem esta no grupo, mas nunca revela quem votou ou quantos votos foram computados. A unica informacao publica e quando a maioria ja votou.
 
-## Deploy on Vercel
+**Notificacoes**: ao entrar num grupo, o app solicita permissao de notificacao. Quando o threshold e atingido, uma notificacao push e disparada mesmo se o usuario estiver em outra aba.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Licenca
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[MIT](LICENSE)
