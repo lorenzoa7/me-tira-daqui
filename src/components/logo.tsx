@@ -10,8 +10,8 @@ interface LogoProps {
 export function Logo({ size = "lg" }: LogoProps) {
   const lg = size === "lg";
 
-  const maxFont = lg ? 200 : 80;
-  const containerClass = lg ? "w-full max-w-md" : "w-full max-w-[14rem]";
+  const maxFont = lg ? 160 : 80;
+  const containerClass = lg ? "w-full max-w-xs sm:max-w-md" : "w-full max-w-[14rem]";
 
   return (
     <div

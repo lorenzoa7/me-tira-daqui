@@ -38,8 +38,8 @@ export function CreateGroupForm() {
 
   return (
     <Card>
-      <CardContent className="pt-6">
-        <form onSubmit={handleSubmit} className="space-y-4">
+      <CardContent className="pt-4 sm:pt-6">
+        <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
           <Input
             placeholder="Seu nome (ex: Zezinho)"
             value={name}

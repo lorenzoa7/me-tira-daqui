@@ -49,8 +49,8 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className={`${outfit.variable} font-sans antialiased`}>
-        <div className="min-h-screen flex flex-col">
-          <header className="flex justify-end p-3">
+        <div className="min-h-dvh flex flex-col">
+          <header className="flex justify-end p-2 sm:p-3">
             <ThemeToggle />
           </header>
           <div className="flex-1 flex flex-col">
