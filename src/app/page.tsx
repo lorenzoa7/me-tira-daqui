@@ -1,4 +1,5 @@
 import { CreateGroupForm } from "@/components/create-group-form";
+import { InstallButton } from "@/components/install-button";
 import { Logo } from "@/components/logo";
 
 export default function Home() {
@@ -16,9 +17,14 @@ export default function Home() {
 
         <CreateGroupForm />
 
-        <p className="text-sm text-muted-foreground/60">
-          Sem cadastro. Sem julgamento. Ninguém vai saber que foi você 🤫
-        </p>
+        <div className="space-y-4">
+          <p className="text-sm text-muted-foreground/60">
+            Sem cadastro. Sem julgamento. Ninguém vai saber que foi você 🤫
+          </p>
+          <div className="flex justify-center">
+            <InstallButton />
+          </div>
+        </div>
       </div>
     </main>
   );

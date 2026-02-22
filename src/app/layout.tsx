@@ -14,6 +14,12 @@ export const metadata: Metadata = {
     "Vote anonimamente pra ir embora do rolê sem ser o chatão. Quando a maioria votar, todo mundo fica sabendo!",
   icons: {
     icon: "/favicon.svg",
+    apple: "/api/icon?size=192",
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Me Tira Daqui!",
   },
 };
 
