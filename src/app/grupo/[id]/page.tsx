@@ -25,6 +25,13 @@ interface GroupInfo {
 export default function GroupPage() {
   const params = useParams();
   const groupId = params.id as string;
+
+  // key forces React to fully remount when groupId changes,
+  // preventing stale state (notFound, isClosed, etc.) from leaking between groups
+  return <GroupPageContent key={groupId} groupId={groupId} />;
+}
+
+function GroupPageContent({ groupId }: { groupId: string }) {
   const { t } = useTranslation();
 
   const [memberId, setMemberId] = useState<string | null>(null);
