@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 
 interface VoteButtonProps {
@@ -33,7 +34,12 @@ export function VoteButton({ groupId, memberId, onVoted }: VoteButtonProps) {
   }
 
   return (
-    <div className="space-y-3">
+    <motion.div
+      className="space-y-3"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
       <Button
         onClick={handleVote}
         disabled={loading}
@@ -45,6 +51,6 @@ export function VoteButton({ groupId, memberId, onVoted }: VoteButtonProps) {
       <p className="text-xs text-muted-foreground text-center">
         Voto anônimo — ninguém vai saber que foi você 🤫
       </p>
-    </div>
+    </motion.div>
   );
 }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Logo } from "@/components/logo";
 
 interface GroupLobbyProps {
   groupId: string;
@@ -41,8 +42,8 @@ export function GroupLobby({ groupId, onJoined }: GroupLobbyProps) {
   return (
     <div className="flex-1 flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6 text-center">
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold">🍻 Me Tira Daqui!</h1>
+        <div className="space-y-3">
+          <Logo size="sm" />
           <p className="text-muted-foreground">
             Você foi convidado pra um grupo.
             <br />

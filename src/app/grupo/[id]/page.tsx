@@ -10,6 +10,7 @@ import { GroupFinished } from "@/components/group-finished";
 import { ShareLink } from "@/components/share-link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Logo } from "@/components/logo";
 
 interface GroupInfo {
   memberCount: number;
@@ -208,8 +209,8 @@ export default function GroupPage() {
   return (
     <main className="flex-1 flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md space-y-4">
-        <div className="text-center space-y-1">
-          <h1 className="text-2xl font-bold">🍻 Me Tira Daqui!</h1>
+        <div className="text-center space-y-2">
+          <Logo size="sm" />
           <p className="text-sm text-muted-foreground">
             {info?.memberCount ?? "..."} no rolê
           </p>

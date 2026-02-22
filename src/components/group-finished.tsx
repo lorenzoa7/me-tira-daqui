@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { motion } from "motion/react";
 import { ArrowLeft } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -40,7 +41,12 @@ export function GroupFinished({ isClosed }: GroupFinishedProps) {
 
   if (isClosed) {
     return (
-      <div className="space-y-4">
+      <motion.div
+        className="space-y-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
         <Card>
           <CardContent className="pt-6 text-center space-y-4">
             <h2 className="text-2xl font-bold">Grupo encerrado 👋</h2>
@@ -55,24 +61,42 @@ export function GroupFinished({ isClosed }: GroupFinishedProps) {
             Voltar ao início
           </a>
         </Button>
-      </div>
+      </motion.div>
     );
   }
 
   return (
-    <Card className="border-primary bg-primary/10">
-      <CardContent className="pt-8 pb-8 text-center space-y-3">
-        <p className="text-4xl">🎉🍻🎉</p>
-        <h2 className="text-3xl font-bold text-primary">
-          HORA DE VAZAR!
-        </h2>
-        <p className="text-lg text-foreground/80">
-          A maioria votou — bora embora, galera!
-        </p>
-        <p className="text-muted-foreground text-sm">
-          Pega as coisas e partiu 🏃💨
-        </p>
-      </CardContent>
-    </Card>
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5, type: "spring", stiffness: 200 }}
+    >
+      <Card className="border-primary bg-primary/10">
+        <CardContent className="pt-8 pb-8 text-center space-y-3">
+          <motion.p
+            className="text-4xl"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.2, type: "spring", stiffness: 400 }}
+          >
+            🎉🍻🎉
+          </motion.p>
+          <motion.h2
+            className="text-3xl font-black uppercase text-primary"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.4 }}
+          >
+            Hora de vazar!
+          </motion.h2>
+          <p className="text-lg text-foreground/80">
+            A maioria votou — bora embora, galera!
+          </p>
+          <p className="text-muted-foreground text-sm">
+            Pega as coisas e partiu 🏃💨
+          </p>
+        </CardContent>
+      </Card>
+    </motion.div>
   );
 }

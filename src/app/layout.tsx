@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { DM_Sans } from "next/font/google";
+import { Outfit } from "next/font/google";
 import { ThemeToggle } from "@/components/theme-toggle";
 import "./globals.css";
 
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Me Tira Daqui",
+  title: "Me Tira Daqui!",
   description:
     "Vote anonimamente pra ir embora do rolê sem ser o chatão. Quando a maioria votar, todo mundo fica sabendo!",
   icons: {
@@ -17,7 +17,6 @@ export const metadata: Metadata = {
   },
 };
 
-// Inline script that runs before paint to prevent dark/light flash
 const themeScript = `
 (function(){
   try {
@@ -43,7 +42,7 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className={`${dmSans.variable} font-sans antialiased`}>
+      <body className={`${outfit.variable} font-sans antialiased`}>
         <div className="min-h-screen flex flex-col">
           <header className="flex justify-end p-3">
             <ThemeToggle />
