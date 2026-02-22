@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Logo } from "@/components/logo";
+import { useTranslation } from "@/lib/i18n";
 
 interface GroupLobbyProps {
   groupId: string;
@@ -14,6 +15,7 @@ interface GroupLobbyProps {
 export function GroupLobby({ groupId, onJoined }: GroupLobbyProps) {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
 
   async function handleJoin(e: React.FormEvent) {
     e.preventDefault();
@@ -27,13 +29,13 @@ export function GroupLobby({ groupId, onJoined }: GroupLobbyProps) {
         body: JSON.stringify({ name: name.trim() }),
       });
 
-      if (!res.ok) throw new Error("Erro ao entrar");
+      if (!res.ok) throw new Error(t("lobby.error"));
 
       const { memberId } = await res.json();
       localStorage.setItem(`metiradaqui-${groupId}`, memberId);
       onJoined(memberId);
     } catch {
-      alert("Erro ao entrar no grupo. O grupo pode não existir ou já ter sido encerrado.");
+      alert(t("lobby.errorAlert"));
     } finally {
       setLoading(false);
     }
@@ -45,20 +47,20 @@ export function GroupLobby({ groupId, onJoined }: GroupLobbyProps) {
         <div className="space-y-3">
           <Logo size="sm" />
           <p className="text-muted-foreground">
-            Você foi convidado pra um grupo.
+            {t("lobby.invited")}
             <br />
-            Coloca seu nome pra entrar no rolê!
+            {t("lobby.enterPrompt")}
           </p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Entrar no grupo</CardTitle>
+            <CardTitle className="text-lg">{t("lobby.cardTitle")}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleJoin} className="space-y-4">
               <Input
-                placeholder="Seu nome"
+                placeholder={t("lobby.placeholder")}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 maxLength={30}
@@ -71,7 +73,7 @@ export function GroupLobby({ groupId, onJoined }: GroupLobbyProps) {
                 className="w-full text-lg h-12 font-semibold"
                 disabled={!name.trim() || loading}
               >
-                {loading ? "Entrando..." : "Entrar no rolê 🍻"}
+                {loading ? t("lobby.loading") : t("lobby.submit")}
               </Button>
             </form>
           </CardContent>

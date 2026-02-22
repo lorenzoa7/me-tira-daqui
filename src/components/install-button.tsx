@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "@/lib/i18n";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -15,6 +16,7 @@ export function InstallButton() {
     useState<BeforeInstallPromptEvent | null>(null);
   const [isInstallable, setIsInstallable] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Already running as installed PWA
@@ -78,7 +80,7 @@ export function InstallButton() {
           className="gap-2"
         >
           <Download className="h-4 w-4" />
-          Instalar app
+          {t("install.button")}
         </Button>
       </motion.div>
     </AnimatePresence>

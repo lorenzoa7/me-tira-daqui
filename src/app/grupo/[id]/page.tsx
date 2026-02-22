@@ -11,6 +11,7 @@ import { ShareLink } from "@/components/share-link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Logo } from "@/components/logo";
+import { useTranslation } from "@/lib/i18n";
 
 interface GroupInfo {
   memberCount: number;
@@ -24,6 +25,7 @@ interface GroupInfo {
 export default function GroupPage() {
   const params = useParams();
   const groupId = params.id as string;
+  const { t } = useTranslation();
 
   const [memberId, setMemberId] = useState<string | null>(null);
   const [info, setInfo] = useState<GroupInfo | null>(null);
@@ -101,8 +103,14 @@ export default function GroupPage() {
     es.addEventListener("time-to-leave", () => {
       setIsFinished(true);
       if ("Notification" in window && Notification.permission === "granted") {
-        new Notification("🍻 Me Tira Daqui!", {
-          body: "Hora de vazar, galera! A maioria votou pra ir embora!",
+        const title = document.documentElement.lang === "en"
+          ? "🍻 Get Me Outta Here!"
+          : "🍻 Me Tira Daqui!";
+        const body = document.documentElement.lang === "en"
+          ? "Time to bounce! The majority voted to leave!"
+          : "Hora de vazar, galera! A maioria votou pra ir embora!";
+        new Notification(title, {
+          body,
           icon: "/favicon.svg",
         });
       }
@@ -138,7 +146,7 @@ export default function GroupPage() {
         body: JSON.stringify({ memberId }),
       });
     } catch {
-      alert("Erro ao fechar grupo.");
+      alert(t("group.closeError"));
     } finally {
       setClosingGroup(false);
     }
@@ -147,7 +155,7 @@ export default function GroupPage() {
   if (loading) {
     return (
       <main className="flex-1 flex items-center justify-center p-4">
-        <p className="text-muted-foreground">Carregando...</p>
+        <p className="text-muted-foreground">{t("group.loading")}</p>
       </main>
     );
   }
@@ -156,14 +164,14 @@ export default function GroupPage() {
     return (
       <main className="flex-1 flex items-center justify-center p-4">
         <div className="text-center space-y-4">
-          <h2 className="text-xl font-semibold">Grupo não encontrado 😕</h2>
+          <h2 className="text-xl font-semibold">{t("group.notFound.title")}</h2>
           <p className="text-muted-foreground">
-            Esse grupo não existe ou já expirou.
+            {t("group.notFound.description")}
           </p>
           <Button variant="secondary" size="sm" className="gap-2" asChild>
             <a href="/">
               <ArrowLeft className="h-4 w-4" />
-              Voltar ao início
+              {t("group.backHome")}
             </a>
           </Button>
         </div>
@@ -198,7 +206,7 @@ export default function GroupPage() {
               onClick={handleCloseGroup}
               disabled={closingGroup}
             >
-              {closingGroup ? "Encerrando..." : "Encerrar grupo"}
+              {closingGroup ? t("group.closing") : t("group.close")}
             </Button>
           )}
         </div>
@@ -212,7 +220,7 @@ export default function GroupPage() {
         <div className="text-center space-y-2">
           <Logo size="sm" />
           <p className="text-sm text-muted-foreground">
-            {info?.memberCount ?? "..."} no rolê
+            {info?.memberCount ?? "..."} {t("group.memberCount")}
           </p>
         </div>
 
@@ -221,7 +229,7 @@ export default function GroupPage() {
         <Card>
           <CardContent className="pt-4 pb-4">
             <p className="text-sm text-muted-foreground font-medium mb-2">
-              Quem tá no rolê
+              {t("group.memberList")}
             </p>
             <div className="space-y-1.5">
               {info?.members.map((name, i) => (
@@ -253,7 +261,7 @@ export default function GroupPage() {
               onClick={handleCloseGroup}
               disabled={closingGroup}
             >
-              {closingGroup ? "Encerrando..." : "Encerrar grupo"}
+              {closingGroup ? t("group.closing") : t("group.close")}
             </button>
           </div>
         )}

@@ -6,11 +6,13 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import { useTranslation } from "@/lib/i18n";
 
 export function CreateGroupForm() {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { t } = useTranslation();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -24,14 +26,14 @@ export function CreateGroupForm() {
         body: JSON.stringify({ hostName: name.trim() }),
       });
 
-      if (!res.ok) throw new Error("Erro ao criar grupo");
+      if (!res.ok) throw new Error(t("createGroup.error"));
 
       const { groupId, memberId } = await res.json();
       localStorage.setItem(`metiradaqui-${groupId}`, memberId);
       router.push(`/grupo/${groupId}`);
       // Don't reset loading — we're navigating away
     } catch {
-      alert("Erro ao criar grupo. Tente novamente.");
+      alert(t("createGroup.errorAlert"));
       setLoading(false);
     }
   }
@@ -41,7 +43,7 @@ export function CreateGroupForm() {
       <CardContent className="pt-4 sm:pt-6">
         <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
           <Input
-            placeholder="Seu nome (ex: Zezinho)"
+            placeholder={t("createGroup.placeholder")}
             value={name}
             onChange={(e) => setName(e.target.value)}
             maxLength={30}
@@ -54,9 +56,9 @@ export function CreateGroupForm() {
             className="w-full text-lg h-12 font-semibold gap-2"
             disabled={!name.trim() || loading}
           >
-            {loading ? "Criando..." : (
+            {loading ? t("createGroup.loading") : (
               <>
-                Criar grupo
+                {t("createGroup.submit")}
                 <ArrowRight className="h-5 w-5" />
               </>
             )}

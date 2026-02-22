@@ -1,25 +1,17 @@
-const funnyMessages = [
-  "Aguenta mais um pouquinho... ou não",
-  "Seu voto foi computado! Agora é torcer pra galera pensar igual",
-  "Relaxa, ninguém vai saber que foi você",
-  "Já tá querendo ir? Tá cedo ainda... ou não",
-  "Segura firme! Se a galera concordar, já era",
-  "Voto secreto registrado com sucesso!",
-  "A operação 'vazar do rolê' foi iniciada...",
-  "Calma que o Uber tá longe ainda... ou será que não?",
-  "Você não é o único querendo ir embora, confia",
-  "Missão: Me Tira Daqui em andamento...",
-  "Seu pedido de resgate foi registrado!",
-  "Firme e forte! A liberdade tá chegando...",
-  "O sofá de casa tá te chamando, né?",
-  "Segura a onda, a galera tá decidindo...",
-  "Contagem regressiva pra liberdade iniciada!",
-];
+import type { TranslationKey } from "./i18n/translations/pt-br";
 
-export function getRandomFunnyMessage(): string {
-  return funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
+const FUNNY_COUNT = 15;
+
+const funnyKeys: TranslationKey[] = Array.from(
+  { length: FUNNY_COUNT },
+  (_, i) => `funny.${i}` as TranslationKey
+);
+
+export function getRandomFunnyMessage(t: (key: TranslationKey) => string): string {
+  const key = funnyKeys[Math.floor(Math.random() * funnyKeys.length)];
+  return t(key);
 }
 
-export function getAllFunnyMessages(): string[] {
-  return [...funnyMessages];
+export function getAllFunnyMessages(t: (key: TranslationKey) => string): string[] {
+  return funnyKeys.map((key) => t(key));
 }

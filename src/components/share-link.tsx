@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Copy, Check, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useTranslation } from "@/lib/i18n";
 
 interface ShareLinkProps {
   groupId: string;
@@ -11,6 +12,7 @@ interface ShareLinkProps {
 
 export function ShareLink({ groupId }: ShareLinkProps) {
   const [copied, setCopied] = useState(false);
+  const { t } = useTranslation();
 
   const link = typeof window !== "undefined"
     ? `${window.location.origin}/grupo/${groupId}`
@@ -37,8 +39,8 @@ export function ShareLink({ groupId }: ShareLinkProps) {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "Me Tira Daqui! 🍻",
-          text: "Entra no grupo pra gente decidir quando vazar!",
+          title: t("share.title"),
+          text: t("share.text"),
           url: link,
         });
       } catch {
@@ -53,7 +55,7 @@ export function ShareLink({ groupId }: ShareLinkProps) {
     <Card>
       <CardContent className="pt-4 space-y-3">
         <p className="text-sm text-muted-foreground text-center">
-          Compartilhe o link com a galera 📤
+          {t("share.prompt")}
         </p>
         <div className="flex gap-2">
           <code className="flex-1 bg-muted rounded-md px-3 py-2 text-sm truncate">
@@ -75,7 +77,7 @@ export function ShareLink({ groupId }: ShareLinkProps) {
             onClick={handleShare}
           >
             <Share2 className="h-4 w-4" />
-            Compartilhar
+            {t("share.button")}
           </Button>
         )}
       </CardContent>

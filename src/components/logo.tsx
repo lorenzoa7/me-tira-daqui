@@ -2,6 +2,7 @@
 
 import { AutoTextSize } from "auto-text-size";
 import { motion } from "motion/react";
+import { useTranslation } from "@/lib/i18n";
 
 interface LogoProps {
   size?: "lg" | "sm";
@@ -9,6 +10,7 @@ interface LogoProps {
 
 export function Logo({ size = "lg" }: LogoProps) {
   const lg = size === "lg";
+  const { t } = useTranslation();
 
   const maxFont = lg ? 160 : 80;
   const containerClass = lg ? "w-full max-w-xs sm:max-w-md" : "w-full max-w-[14rem]";
@@ -18,7 +20,7 @@ export function Logo({ size = "lg" }: LogoProps) {
       className={`${containerClass} mx-auto select-none`}
       role="heading"
       aria-level={1}
-      aria-label="Me Tira Daqui!"
+      aria-label={t("logo.aria")}
     >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -31,7 +33,7 @@ export function Logo({ size = "lg" }: LogoProps) {
           maxFontSizePx={maxFont}
         >
           <span className="block font-black uppercase leading-[0.88] tracking-tight whitespace-nowrap">
-            Me Tira
+            {t("logo.line1")}
           </span>
         </AutoTextSize>
       </motion.div>
@@ -47,7 +49,7 @@ export function Logo({ size = "lg" }: LogoProps) {
           maxFontSizePx={maxFont}
         >
           <span className="block font-black uppercase leading-[0.88] tracking-tight text-primary whitespace-nowrap">
-            Daqui!
+            {t("logo.line2")}
           </span>
         </AutoTextSize>
       </motion.div>

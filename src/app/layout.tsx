@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { ClientBody } from "./client-body";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -38,6 +38,19 @@ const themeScript = `
 })();
 `;
 
+const localeScript = `
+(function(){
+  try {
+    var l = localStorage.getItem('metiradaqui-locale');
+    if (l === 'en' || l === 'pt-BR') {
+      document.documentElement.lang = l;
+    } else if (!navigator.language.startsWith('pt')) {
+      document.documentElement.lang = 'en';
+    }
+  } catch(e) {}
+})();
+`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -47,16 +60,10 @@ export default function RootLayout({
     <html lang="pt-BR" className="dark" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script dangerouslySetInnerHTML={{ __html: localeScript }} />
       </head>
       <body className={`${outfit.variable} font-sans antialiased`}>
-        <div className="min-h-dvh flex flex-col">
-          <header className="flex justify-end p-2 sm:p-3">
-            <ThemeToggle />
-          </header>
-          <div className="flex-1 flex flex-col">
-            {children}
-          </div>
-        </div>
+        <ClientBody>{children}</ClientBody>
       </body>
     </html>
   );

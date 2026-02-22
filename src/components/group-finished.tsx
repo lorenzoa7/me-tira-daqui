@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { ArrowLeft } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "@/lib/i18n";
 
 interface GroupFinishedProps {
   isClosed: boolean;
@@ -17,6 +18,7 @@ const CONFETTI_COLORS = [
 
 export function GroupFinished({ isClosed }: GroupFinishedProps) {
   const confettiSpawned = useRef(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (isClosed || confettiSpawned.current) return;
@@ -49,16 +51,16 @@ export function GroupFinished({ isClosed }: GroupFinishedProps) {
       >
         <Card>
           <CardContent className="pt-6 text-center space-y-4">
-            <h2 className="text-2xl font-bold">Grupo encerrado 👋</h2>
+            <h2 className="text-2xl font-bold">{t("finished.closed.title")}</h2>
             <p className="text-muted-foreground">
-              O host encerrou esse grupo. Valeu pela presença!
+              {t("finished.closed.description")}
             </p>
           </CardContent>
         </Card>
         <Button variant="secondary" className="w-full gap-2" asChild>
           <a href="/">
             <ArrowLeft className="h-4 w-4" />
-            Voltar ao início
+            {t("group.backHome")}
           </a>
         </Button>
       </motion.div>
@@ -87,13 +89,13 @@ export function GroupFinished({ isClosed }: GroupFinishedProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.4 }}
           >
-            Hora de vazar!
+            {t("finished.heading")}
           </motion.h2>
           <p className="text-lg text-foreground/80">
-            A maioria votou — bora embora, galera!
+            {t("finished.majority")}
           </p>
           <p className="text-muted-foreground text-sm">
-            Pega as coisas e partiu 🏃💨
+            {t("finished.gogogo")}
           </p>
         </CardContent>
       </Card>

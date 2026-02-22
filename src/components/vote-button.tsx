@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "@/lib/i18n";
 
 interface VoteButtonProps {
   groupId: string;
@@ -12,6 +13,7 @@ interface VoteButtonProps {
 
 export function VoteButton({ groupId, memberId, onVoted }: VoteButtonProps) {
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
 
   async function handleVote() {
     if (loading) return;
@@ -24,11 +26,11 @@ export function VoteButton({ groupId, memberId, onVoted }: VoteButtonProps) {
         body: JSON.stringify({ memberId }),
       });
 
-      if (!res.ok) throw new Error("Erro ao votar");
+      if (!res.ok) throw new Error("vote failed");
 
       onVoted();
     } catch {
-      alert("Erro ao registrar voto. Tente novamente.");
+      alert(t("vote.errorAlert"));
       setLoading(false);
     }
   }
@@ -46,10 +48,10 @@ export function VoteButton({ groupId, memberId, onVoted }: VoteButtonProps) {
         size="lg"
         className="w-full h-16 text-xl font-bold animate-pulse-glow hover:scale-[1.02] transition-transform"
       >
-        {loading ? "Votando..." : "🏃 ME TIRA DAQUI!"}
+        {loading ? t("vote.loading") : t("vote.button")}
       </Button>
       <p className="text-xs text-muted-foreground text-center">
-        Voto anônimo — ninguém vai saber que foi você 🤫
+        {t("vote.anonymous")}
       </p>
     </motion.div>
   );

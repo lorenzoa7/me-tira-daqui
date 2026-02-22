@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd /c/trabalhos/metiradaqui && npm run build 2>&1)"
+    ]
+  }
+}
