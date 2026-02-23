@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { castVote } from "@/lib/store";
+import { sendPushToGroup } from "@/lib/web-push";
 
 export async function POST(
   request: Request,
@@ -17,6 +18,10 @@ export async function POST(
     const result = castVote(id, memberId);
     if (!result.success) {
       return NextResponse.json({ error: "Voto inválido" }, { status: 400 });
+    }
+
+    if (result.thresholdReached) {
+      sendPushToGroup(id);
     }
 
     return NextResponse.json({ success: true });

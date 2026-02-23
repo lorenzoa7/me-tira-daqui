@@ -13,6 +13,15 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Logo } from "@/components/logo";
 import { useTranslation } from "@/lib/i18n";
 
+function urlBase64ToUint8Array(base64String: string) {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+  const raw = atob(base64);
+  const arr = new Uint8Array(raw.length);
+  for (let i = 0; i < raw.length; i++) arr[i] = raw.charCodeAt(i);
+  return arr;
+}
+
 interface GroupInfo {
   memberCount: number;
   members: string[];
@@ -32,7 +41,7 @@ export default function GroupPage() {
 }
 
 function GroupPageContent({ groupId }: { groupId: string }) {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
 
   const [memberId, setMemberId] = useState<string | null>(null);
   const [info, setInfo] = useState<GroupInfo | null>(null);
@@ -80,13 +89,48 @@ function GroupPageContent({ groupId }: { groupId: string }) {
   }, [groupId, fetchInfo]);
 
   useEffect(() => {
-    if (memberId && !notificationPermissionAsked.current) {
-      notificationPermissionAsked.current = true;
-      if ("Notification" in window && Notification.permission === "default") {
-        Notification.requestPermission();
+    if (!memberId || notificationPermissionAsked.current) return;
+    notificationPermissionAsked.current = true;
+
+    async function subscribeToPush() {
+      try {
+        if (!("Notification" in window)) return;
+        const permission = await Notification.requestPermission();
+        if (permission !== "granted") return;
+
+        if (!("PushManager" in window) || !("serviceWorker" in navigator)) return;
+        const registration = await navigator.serviceWorker.ready;
+
+        const existing = await registration.pushManager.getSubscription();
+        const subscription =
+          existing ??
+          (await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(
+              process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!
+            ),
+          }));
+
+        const sub = subscription.toJSON();
+        await fetch(`/api/groups/${groupId}/subscribe`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            memberId,
+            subscription: {
+              endpoint: sub.endpoint,
+              keys: sub.keys,
+            },
+            locale,
+          }),
+        });
+      } catch {
+        // Push subscription not supported or failed — fall back to SSE only
       }
     }
-  }, [memberId]);
+
+    subscribeToPush();
+  }, [memberId, groupId, locale]);
 
   useEffect(() => {
     if (!memberId) return;
@@ -109,18 +153,6 @@ function GroupPageContent({ groupId }: { groupId: string }) {
 
     es.addEventListener("time-to-leave", () => {
       setIsFinished(true);
-      if ("Notification" in window && Notification.permission === "granted") {
-        const title = document.documentElement.lang === "en"
-          ? "🍻 Get Me Outta Here!"
-          : "🍻 Me Tira Daqui!";
-        const body = document.documentElement.lang === "en"
-          ? "Time to bounce! The majority voted to leave!"
-          : "Hora de vazar, galera! A maioria votou pra ir embora!";
-        new Notification(title, {
-          body,
-          icon: "/favicon.svg",
-        });
-      }
     });
 
     es.addEventListener("group-closed", () => {

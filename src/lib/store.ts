@@ -1,8 +1,18 @@
 import { nanoid } from "nanoid";
 import { randomUUID } from "crypto";
 
+export interface PushSubscriptionData {
+  endpoint: string;
+  keys: {
+    p256dh: string;
+    auth: string;
+  };
+}
+
 interface Member {
   name: string;
+  pushSubscription?: PushSubscriptionData;
+  locale?: string;
 }
 
 interface Group {
@@ -159,6 +169,48 @@ function broadcast(groupId: string, event: string, data: unknown) {
 
   for (const dead of deadClients) {
     group.sseClients.delete(dead);
+  }
+}
+
+export function subscribeMember(
+  groupId: string,
+  memberId: string,
+  subscription: PushSubscriptionData,
+  locale?: string
+): boolean {
+  const group = groups.get(groupId);
+  if (!group) return false;
+  const member = group.members.get(memberId);
+  if (!member) return false;
+  member.pushSubscription = subscription;
+  if (locale) member.locale = locale;
+  return true;
+}
+
+export function getPushSubscriptions(
+  groupId: string
+): { subscription: PushSubscriptionData; locale: string }[] {
+  const group = groups.get(groupId);
+  if (!group) return [];
+  const results: { subscription: PushSubscriptionData; locale: string }[] = [];
+  for (const member of group.members.values()) {
+    if (member.pushSubscription) {
+      results.push({
+        subscription: member.pushSubscription,
+        locale: member.locale ?? "pt-BR",
+      });
+    }
+  }
+  return results;
+}
+
+export function removePushSubscription(groupId: string, endpoint: string): void {
+  const group = groups.get(groupId);
+  if (!group) return;
+  for (const member of group.members.values()) {
+    if (member.pushSubscription?.endpoint === endpoint) {
+      member.pushSubscription = undefined;
+    }
   }
 }
 

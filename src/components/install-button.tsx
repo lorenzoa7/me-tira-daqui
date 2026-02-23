@@ -43,16 +43,6 @@ export function InstallButton() {
     };
   }, []);
 
-  // Register service worker
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js", {
-        scope: "/",
-        updateViaCache: "none",
-      });
-    }
-  }, []);
-
   async function handleInstall() {
     if (!deferredPrompt) return;
     deferredPrompt.prompt();

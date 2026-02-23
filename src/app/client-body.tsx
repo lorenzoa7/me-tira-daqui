@@ -5,6 +5,7 @@ import { Github } from "lucide-react";
 import { I18nProvider, useTranslation } from "@/lib/i18n";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageToggle } from "@/components/language-toggle";
+import { ServiceWorkerRegister } from "@/components/sw-register";
 
 function Footer() {
   const { t } = useTranslation();
@@ -41,6 +42,7 @@ function Footer() {
 export function ClientBody({ children }: { children: ReactNode }) {
   return (
     <I18nProvider>
+      <ServiceWorkerRegister />
       <div className="min-h-dvh flex flex-col">
         <header className="flex justify-end gap-1 p-2 sm:p-3">
           <LanguageToggle />
